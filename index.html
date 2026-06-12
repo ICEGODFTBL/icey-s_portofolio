@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="dark">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>icegodftbl</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="icegodftbl">
+  <meta property="og:description" content="some idiot on the internet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <div class="top-grid">
+      <div>
+        <div class="profile-card" id="profile">
+          <img src="" id="profile-banner" width="500" height="150" decoding="async" draggable="false" alt="">
+          <div class="profile-meta-row">
+            <div id="local-time" class="meta-badge">
+              <svg class="clock-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>
+              <span id="time-text"></span>
+            </div>
+          </div>
+          <div class="loading-overlay" id="profile-loader"><span>Loading..</span></div>
+          <div class="avatar-wrapper">
+            <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="avatar" id="avatar" width="120" height="120" draggable="false" alt="Profile image">
+            <img src="" class="avatar-decoration" id="avatar-decoration" width="160" height="160" draggable="false" alt="">
+            <img src="" class="status-indicator" id="status-icon" width="22" height="22" draggable="false" alt="Online status">
+          </div>
+          <div class="username-container">
+            <div class="display-name" id="display-name"><span class="display-name-inner"></span></div>
+          </div>
+          <div class="username-line">
+            <div class="username-flex">
+              <span class="at-username" id="at-username"></span>
+              <div id="guild-badge" style="display:none;">
+                <img id="guild-badge-icon" src="" width="16" height="16" alt="">
+                <span id="guild-badge-tag"></span>
+              </div>
+              <div class="devices" id="devices"></div>
+            </div>
+          </div>
+          <div class="custom-status" id="custom-status"></div>
+        </div>
+      </div>
+      <div>
+        <div id="main-activity-cards">
+          <div class="spotify-card inactive" id="spotify-card">
+            <div class="loading-overlay" id="spotify-loader"><span>Loading..</span></div>
+            <svg class="spotify-bg-icon" viewBox="0 0 128 128" role="img" preserveAspectRatio="xMidYMid meet"><g fill="#dce3de"><path d="M59.01 92.53c-1.16-3.05-4.71-4.54-7.91-3.32l-16.78 6.38L44.5 59.35c.36-1.27.3-2.58-.16-3.8c-1.23-3.23-4.99-4.81-8.39-3.51L8.1 62.62c-1.54.58-2.77 1.7-3.48 3.13c-.73 1.48-.82 3.13-.25 4.64c1.16 3.06 4.73 4.56 7.95 3.34l16.23-6.17l-10.27 36.04c-.37 1.3-.32 2.64.15 3.88c.95 2.5 3.4 4.02 6.04 4.02c.82 0 1.66-.15 2.48-.46l28.36-10.78c3.2-1.22 4.86-4.69 3.7-7.73z"/><path d="M92.6 61.82c-.56-3.29-3.83-5.48-7.28-4.9L67.21 60L84.6 25.63c.61-1.21.81-2.54.59-3.85c-.59-3.49-4.06-5.81-7.73-5.19L47.4 21.72c-1.66.28-3.12 1.15-4.12 2.46c-1.03 1.35-1.44 2.98-1.17 4.61c.56 3.31 3.85 5.51 7.32 4.92l17.52-2.98L49.5 64.88a6.246 6.246 0 0 0-.61 3.93c.46 2.7 2.62 4.71 5.27 5.23c.82.16 1.69.18 2.58.03l30.61-5.21c3.45-.59 5.81-3.75 5.25-7.04z"/><path d="M123.94 74.46c-.18-2.13-2.15-3.71-4.39-3.52l-11.74.99l12.97-21.01c.46-.74.66-1.58.59-2.42c-.19-2.26-2.28-3.93-4.65-3.73L97.25 46.4a4.19 4.19 0 0 0-2.76 1.35c-.73.8-1.08 1.83-.99 2.88c.18 2.14 2.16 3.73 4.41 3.54l11.35-.96l-13 20.86c-.47.75-.68 1.61-.6 2.47c.15 1.75 1.42 3.15 3.08 3.63c.52.15 1.07.21 1.64.16l19.83-1.67c2.24-.18 3.91-2.07 3.73-4.2z"/></g></svg>
+            <div class="section-title-container">
+              <div class="card-title">Listening to Spotify</div>
+              <div class="spotify-controls-wrapper" style="display: flex; gap: 8px;">
+                <a id="open-spotify-btn" href="#" target="_blank" rel="noopener noreferrer" aria-label="Open in Spotify">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="spotify-container">
+              <img class="album-art" id="album-art" src="https://via.placeholder.com/80/1a1a1a/666?text=♪" width="80" height="80" decoding="async" draggable="false" alt="Album art">
+              <div class="spotify-info">
+                <div class="song-name" id="song-name">Not Listening</div>
+                <div class="artist-name" id="artist-name">No song currently playing.</div>
+                <div class="album-name" id="album-name"></div>
+                <div class="progress-container" id="spotify-progress-container">
+                  <span class="time-display" id="time-elapsed">0:00</span>
+                  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+                  <span class="time-display" id="time-remaining">-0:00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-grid">
+      <div class="section-card" id="about-me-card">
+        <div class="section-title-container">
+          <div class="card-title">About Me</div>
+          <div class="social-links">
+            <a href="https://discord.com/users/1312924157578711071" target="_blank" rel="noopener noreferrer" aria-label="Discord profile">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="about-me-content">
+          <div class="about-section">
+            <h4>Who am I?</h4>
+            <p>i'm <span class="rainbow-text" data-text="icegodftbl">icegodftbl</span> — a hobby developer and music enjoyer.</p>
+          </div>
+          <div class="about-section">
+            <h4>My Interests</h4>
+            <p>i love music, coding, and wasting time on the internet.</p>
+          </div>
+        </div>
+      </div>
+      <div class="section-card" id="recent-songs-card">
+        <div class="section-title-container">
+          <div class="card-title">Recent Streams</div>
+          <div class="controls-group">
+            <button id="refresh-songs-btn" aria-label="Refresh songs">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div id="songs-list-wrapper">
+          <div id="recent-songs-container"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
+
