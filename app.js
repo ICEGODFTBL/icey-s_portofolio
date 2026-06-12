@@ -353,57 +353,5 @@ navBtns.forEach(btn => {
   });
 });
 
-document.addEventListener('click', function(e) {
-  var container = document.createElement('div');
-  container.className = 'click-ripple';
-  container.style.left = e.clientX + 'px';
-  container.style.top = e.clientY + 'px';
-
-  var flash = document.createElement('div');
-  flash.className = 'click-flash';
-  container.appendChild(flash);
-
-  var ring = document.createElement('div');
-  ring.className = 'click-ripple-ring';
-  container.appendChild(ring);
-
-  var count = 8;
-  for (var i = 0; i < count; i++) {
-    var p = document.createElement('div');
-    p.className = 'click-particle';
-    var size = (2 + Math.random() * 3).toFixed(1);
-    p.style.width = size + 'px';
-    p.style.height = size + 'px';
-
-    var angle = (i / count) * 2 * Math.PI + (Math.random() - 0.5) * 0.5;
-    var dist = 16 + Math.random() * 20;
-    var dx = Math.cos(angle) * dist;
-    var dy = Math.sin(angle) * dist;
-
-    p.animate(
-      [
-        { transform: 'translate(0,0) scale(1)', opacity: 1 },
-        {
-          transform: 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(0)',
-          opacity: 0,
-        },
-      ],
-      {
-        duration: 400 + Math.random() * 300,
-        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-        fill: 'forwards',
-      },
-    );
-
-    container.appendChild(p);
-  }
-
-  document.body.appendChild(container);
-
-  setTimeout(function() {
-    if (container.parentNode) container.remove();
-  }, 900);
-});
-
 checkBadges();
 connectLanyard();
