@@ -1,6 +1,7 @@
 const USER_ID = '1312924157578711071';
 const LANYARD_WS = 'wss://api.lanyard.rest/socket';
 const BIRTH_DATE = new Date('2011-06-25T00:00:00Z');
+const GITHUB_USER = 'icegodftbl';
 
 const els = {
   banner: document.getElementById('profile-banner'),
@@ -32,6 +33,9 @@ const els = {
   activityTimeRemaining: document.getElementById('activity-time-remaining'),
   stampGrid: document.getElementById('stamp-grid'),
   navBar: document.getElementById('nav-bar'),
+  contribGrid: document.getElementById('contrib-grid'),
+  contribTotal: document.getElementById('contrib-total'),
+  contribLoader: document.getElementById('contrib-loader'),
 };
 
 let activityInterval = null;
@@ -274,6 +278,53 @@ function renderNoActivity() {
   els.activityLoader.classList.add('hidden');
 }
 
+function getLevelColor(level) {
+  const colors = {
+    0: 'var(--bg-tertiary)',
+    1: '#0e4429',
+    2: '#006d32',
+    3: '#26a641',
+    4: '#39d353'
+  };
+  return colors[level] || colors[0];
+}
+
+async function fetchContributions() {
+  try {
+    const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}?y=last`);
+    const data = await res.json();
+    if (!data.contributions) throw new Error('no data');
+
+    const contributions = data.contributions;
+    const total = contributions.reduce((sum, c) => sum + c.count, 0);
+    els.contribTotal.textContent = total.toLocaleString();
+
+    const weeks = [];
+    for (let i = 0; i < contributions.length; i += 7) {
+      weeks.push(contributions.slice(i, i + 7));
+    }
+
+    let html = '';
+    weeks.forEach(week => {
+      html += '<div class="contrib-week">';
+      week.forEach(day => {
+        const color = getLevelColor(day.level);
+        const title = day.count === 0 ? 'No contributions' : `${day.count} contribution${day.count > 1 ? 's' : ''} on ${day.date}`;
+        html += `<div class="contrib-day" style="background:${color}" title="${title}"></div>`;
+      });
+      for (let i = week.length; i < 7; i++) {
+        html += `<div class="contrib-day" style="background:var(--bg-tertiary);opacity:0.3"></div>`;
+      }
+      html += '</div>';
+    });
+
+    els.contribGrid.innerHTML = html;
+    els.contribLoader.classList.add('hidden');
+  } catch (e) {
+    els.contribLoader.innerHTML = '<span style="font-size:12px;color:var(--text-muted)">Unavailable</span>';
+  }
+}
+
 function updateAge() {
   const now = new Date();
   const ageMs = now - BIRTH_DATE;
@@ -334,3 +385,4 @@ navBtns.forEach(btn => {
 
 checkBadges();
 connectLanyard();
+fetchContributions();
