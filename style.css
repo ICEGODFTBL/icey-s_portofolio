@@ -1,4 +1,3 @@
-
 :root {
 --bg-primary: #0a0a0a;
 --bg-secondary: #111111;
@@ -38,21 +37,10 @@ padding-bottom: 60px;
 max-width: 1200px;
 margin: 0 auto;
 padding: 24px;
-position: relative;
-min-height: calc(100vh - 60px);
 }
 
-.screen {
-display: none;
-opacity: 0;
-transform: translateY(20px);
-transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.screen.active {
-display: block;
-opacity: 1;
-transform: translateY(0);
+.section-block {
+margin-bottom: 20px;
 }
 
 .profile-card {
@@ -366,6 +354,10 @@ max-width: 600px;
 margin: 0 auto;
 }
 
+.badge-card {
+margin-top: 20px;
+}
+
 .about-me-content {
 display: flex;
 flex-direction: column;
@@ -426,9 +418,52 @@ border-top-color: var(--border);
 opacity: 1;
 }
 
-.age-text {
+.age-text-wrapper {
+position: relative;
+display: inline-block;
+cursor: help;
+}
+
+.age-short {
 color: #00A4FC;
 font-weight: 600;
+border-bottom: 2px solid #00A4FC;
+padding-bottom: 1px;
+}
+
+.age-long {
+position: absolute;
+bottom: calc(100% + 8px);
+left: 50%;
+transform: translateX(-50%);
+background: var(--bg-secondary);
+border: 1px solid var(--border);
+border-radius: 8px;
+padding: 6px 12px;
+font-size: 12px;
+color: var(--text-secondary);
+white-space: nowrap;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.2s ease;
+z-index: 9999;
+font-family: 'SF Mono', Monaco, monospace;
+font-variant-numeric: tabular-nums;
+box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.age-long::after {
+content: '';
+position: absolute;
+top: 100%;
+left: 50%;
+transform: translateX(-50%);
+border: 5px solid transparent;
+border-top-color: var(--border);
+}
+
+.age-text-wrapper:hover .age-long {
+opacity: 1;
 }
 
 .social-links {
@@ -458,6 +493,65 @@ margin-top: 12px;
 width: 88px;
 height: 31px;
 image-rendering: pixelated;
+}
+
+.badge-grid {
+display: flex;
+gap: 12px;
+margin-top: 12px;
+}
+
+.badge-item {
+position: relative;
+width: 32px;
+height: 32px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: help;
+}
+
+.badge-img {
+width: 22px;
+height: 22px;
+object-fit: contain;
+}
+
+.badge-item::before {
+content: attr(data-tooltip);
+position: absolute;
+bottom: calc(100% + 8px);
+left: 50%;
+transform: translateX(-50%);
+background: var(--bg-secondary);
+border: 1px solid var(--border);
+border-radius: 6px;
+padding: 4px 10px;
+font-size: 11px;
+color: var(--text-secondary);
+white-space: nowrap;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.2s ease;
+z-index: 9999;
+box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+.badge-item::after {
+content: '';
+position: absolute;
+bottom: 100%;
+left: 50%;
+transform: translateX(-50%);
+border: 4px solid transparent;
+border-top-color: var(--border);
+opacity: 0;
+transition: opacity 0.2s ease;
+}
+
+.badge-item:hover::before,
+.badge-item:hover::after {
+opacity: 1;
 }
 
 .nav-bar {
@@ -500,12 +594,12 @@ background: rgba(255,255,255,0.08);
 }
 
 .nav-btn.active {
-background: var(--accent);
-color: #fff;
+background: #fff;
+color: #000;
 }
 
 .nav-btn.active:hover {
-background: var(--accent-hover);
+background: #e0e0e0;
 }
 
 .click-ripple {
