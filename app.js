@@ -1,14 +1,13 @@
 const USER_ID = '1312924157578711071';
 const LANYARD_WS = 'wss://api.lanyard.rest/socket';
 const BIRTH_DATE = new Date('2011-06-25T00:00:00Z');
-const NEXT_BIRTHDAY = new Date('2026-06-25T00:00:00Z');
 
 const els = {
   banner: document.getElementById('profile-banner'),
   avatar: document.getElementById('avatar'),
   avatarDecoration: document.getElementById('avatar-decoration'),
   statusIcon: document.getElementById('status-icon'),
-  displayName: document.getElementById('display-name-click'),
+  displayName: document.querySelector('.display-name-inner'),
   atUsername: document.getElementById('at-username'),
   customStatus: document.getElementById('custom-status'),
   devices: document.getElementById('devices'),
@@ -18,6 +17,7 @@ const els = {
   profileLoader: document.getElementById('profile-loader'),
   timeText: document.getElementById('time-text'),
   ageText: document.getElementById('age-text'),
+  ageTooltip: document.getElementById('age-tooltip'),
   activityCard: document.getElementById('spotify-card'),
   activityLoader: document.getElementById('spotify-loader'),
   activityTitle: document.getElementById('activity-title'),
@@ -29,16 +29,12 @@ const els = {
   activityProgressFill: document.getElementById('activity-progress-fill'),
   activityTimeElapsed: document.getElementById('activity-time-elapsed'),
   activityTimeRemaining: document.getElementById('activity-time-remaining'),
-  agePopup: document.getElementById('age-popup'),
-  ageMs: document.getElementById('age-ms'),
-  ageNext: document.getElementById('age-next'),
-  closeAgeBtn: document.getElementById('close-age-btn'),
-  ageOverlay: document.getElementById('age-overlay')
 };
 
 let activityInterval = null;
 let ws = null;
 let heartbeatInterval = null;
+let ageTooltipInterval = null;
 
 function updateTime() {
   const now = new Date();
@@ -110,23 +106,15 @@ function updateProfile(data) {
   }
 
   const status = data.discord_status || 'offline';
-  const statusColors = {
-    online: '#3ba55d',
-    idle: '#faa81a',
-    dnd: '#ed4245',
-    offline: '#747f8d',
-    invisible: '#747f8d'
-  };
-  const statusIcons = {
-    online: 'https://cdn.discordapp.com/emojis/1041892916159610900.webp?size=96',
-    idle: 'https://cdn.discordapp.com/emojis/1041892914413228073.webp?size=96',
-    dnd: 'https://cdn.discordapp.com/emojis/1041892913306931271.webp?size=96',
-    offline: 'https://cdn.discordapp.com/emojis/1041892912237408276.webp?size=96',
-    invisible: 'https://cdn.discordapp.com/emojis/1041892912237408276.webp?size=96'
+  const statusFiles = {
+    online: 'online.png',
+    idle: 'moon.png',
+    dnd: 'dnd.png',
+    offline: 'offline.png',
+    invisible: 'offline.png'
   };
 
-  els.statusIcon.src = statusIcons[status] || statusIcons.offline;
-  els.statusIcon.style.background = statusColors[status] || statusColors.offline;
+  els.statusIcon.src = statusFiles[status] || 'offline.png';
 
   els.displayName.textContent = data.discord_user.global_name || data.discord_user.username;
   els.atUsername.textContent = `@${data.discord_user.username}`;
@@ -280,48 +268,29 @@ function renderNoActivity() {
 function updateAge() {
   const now = new Date();
   const ageMs = now - BIRTH_DATE;
-  const ageYears = Math.floor(ageMs / (365.25 * 24 * 60 * 60 * 1000));
-  els.ageText.textContent = ageYears;
+  const ageYears = ageMs / (365.25 * 24 * 60 * 60 * 1000);
+  els.ageText.textContent = ageYears.toFixed(9);
 }
 updateAge();
 
-let ageCounterInterval = null;
+const nameHover = document.getElementById('name-hover');
 
-function openAgePopup() {
-  els.agePopup.hidden = false;
-  document.body.style.overflow = 'hidden';
-
+nameHover.addEventListener('mouseenter', () => {
   function tick() {
     const now = new Date();
     const ageMs = now - BIRTH_DATE;
-    els.ageMs.textContent = ageMs.toLocaleString('en-US');
-
-    const untilBirthday = NEXT_BIRTHDAY - now;
-    if (untilBirthday > 0) {
-      const days = Math.floor(untilBirthday / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((untilBirthday % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const mins = Math.floor((untilBirthday % (1000 * 60 * 60)) / (1000 * 60));
-      els.ageNext.textContent = `${days}d ${hours}h ${mins}m until 15`;
-    } else {
-      els.ageNext.textContent = 'Happy 15th birthday!';
-    }
+    const ageYears = ageMs / (365.25 * 24 * 60 * 60 * 1000);
+    els.ageTooltip.textContent = ageYears.toFixed(9) + ' years old';
   }
-
   tick();
-  ageCounterInterval = setInterval(tick, 1);
-}
+  ageTooltipInterval = setInterval(tick, 50);
+});
 
-function closeAgePopup() {
-  els.agePopup.hidden = true;
-  document.body.style.overflow = '';
-  if (ageCounterInterval) {
-    clearInterval(ageCounterInterval);
-    ageCounterInterval = null;
+nameHover.addEventListener('mouseleave', () => {
+  if (ageTooltipInterval) {
+    clearInterval(ageTooltipInterval);
+    ageTooltipInterval = null;
   }
-}
-
-els.displayName.addEventListener('click', openAgePopup);
-els.closeAgeBtn.addEventListener('click', closeAgePopup);
-els.ageOverlay.addEventListener('click', closeAgePopup);
+});
 
 connectLanyard();
