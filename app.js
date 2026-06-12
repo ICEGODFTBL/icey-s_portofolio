@@ -18,18 +18,17 @@ const els = {
   profileLoader: document.getElementById('profile-loader'),
   timeText: document.getElementById('time-text'),
   ageText: document.getElementById('age-text'),
-  spotifyCard: document.getElementById('spotify-card'),
-  spotifyLoader: document.getElementById('spotify-loader'),
-  albumArt: document.getElementById('album-art'),
-  songName: document.getElementById('song-name'),
-  artistName: document.getElementById('artist-name'),
-  albumName: document.getElementById('album-name'),
-  progressFill: document.getElementById('progress-fill'),
-  timeElapsed: document.getElementById('time-elapsed'),
-  timeRemaining: document.getElementById('time-remaining'),
-  openSpotify: document.getElementById('open-spotify-btn'),
-  songsContainer: document.getElementById('recent-songs-container'),
-  refreshBtn: document.getElementById('refresh-songs-btn'),
+  activityCard: document.getElementById('spotify-card'),
+  activityLoader: document.getElementById('spotify-loader'),
+  activityTitle: document.getElementById('activity-title'),
+  activityIconWrapper: document.getElementById('activity-icon-wrapper'),
+  activityName: document.getElementById('activity-name'),
+  activityDetail: document.getElementById('activity-detail'),
+  activityState: document.getElementById('activity-state'),
+  activityProgressContainer: document.getElementById('activity-progress-container'),
+  activityProgressFill: document.getElementById('activity-progress-fill'),
+  activityTimeElapsed: document.getElementById('activity-time-elapsed'),
+  activityTimeRemaining: document.getElementById('activity-time-remaining'),
   agePopup: document.getElementById('age-popup'),
   ageMs: document.getElementById('age-ms'),
   ageNext: document.getElementById('age-next'),
@@ -37,7 +36,7 @@ const els = {
   ageOverlay: document.getElementById('age-overlay')
 };
 
-let spotifyInterval = null;
+let activityInterval = null;
 let ws = null;
 let heartbeatInterval = null;
 
@@ -74,7 +73,7 @@ function connectLanyard() {
 
     if (t === 'INIT_STATE' || t === 'PRESENCE_UPDATE') {
       updateProfile(d);
-      updateSpotify(d);
+      updateActivity(d);
     }
 
     if (d && d.heartbeat_interval) {
@@ -97,12 +96,6 @@ function connectLanyard() {
 
 function updateProfile(data) {
   if (!data.discord_user) return;
-
-  if (data.discord_user.banner) {
-    els.banner.src = `https://cdn.discordapp.com/banners/${USER_ID}/${data.discord_user.banner}?size=512`;
-  } else {
-    els.banner.style.background = 'linear-gradient(135deg, #001a2e 0%, #00213e 100%)';
-  }
 
   const avatarHash = data.discord_user.avatar;
   els.avatar.src = avatarHash
@@ -173,34 +166,35 @@ function updateProfile(data) {
   els.profileLoader.classList.add('hidden');
 }
 
-function updateSpotify(data) {
-  const spotify = data.spotify;
+function updateActivity(data) {
+  if (activityInterval) {
+    clearInterval(activityInterval);
+    activityInterval = null;
+  }
 
-  if (!spotify) {
-    els.spotifyCard.classList.add('inactive');
-    els.songName.textContent = 'Not Listening';
-    els.artistName.textContent = 'No song currently playing.';
-    els.albumName.textContent = '';
-    els.albumArt.src = 'https://via.placeholder.com/80/1a1a1a/666?text=%E2%99%AA';
-    els.progressFill.style.width = '0%';
-    els.timeElapsed.textContent = '0:00';
-    els.timeRemaining.textContent = '-0:00';
-    els.openSpotify.href = '#';
-    els.spotifyLoader.classList.add('hidden');
-    if (spotifyInterval) {
-      clearInterval(spotifyInterval);
-      spotifyInterval = null;
-    }
+  const spotify = data.spotify;
+  const gameActivity = data.activities?.find(a => a.type === 0 && a.application_id);
+
+  if (spotify) {
+    renderSpotify(spotify);
     return;
   }
 
-  els.spotifyCard.classList.remove('inactive');
-  els.songName.textContent = spotify.song;
-  els.artistName.textContent = spotify.artist;
-  els.albumName.textContent = spotify.album;
-  els.albumArt.src = spotify.album_art_url;
-  els.openSpotify.href = `https://open.spotify.com/track/${spotify.track_id}`;
-  els.spotifyLoader.classList.add('hidden');
+  if (gameActivity) {
+    renderGame(gameActivity);
+    return;
+  }
+
+  renderNoActivity();
+}
+
+function renderSpotify(spotify) {
+  els.activityTitle.textContent = 'Listening to Spotify';
+  els.activityName.textContent = spotify.song;
+  els.activityDetail.textContent = spotify.artist;
+  els.activityState.textContent = spotify.album;
+  els.activityIconWrapper.innerHTML = `<img src="${spotify.album_art_url}" alt="">`;
+  els.activityProgressContainer.style.display = 'flex';
 
   const start = spotify.timestamps?.start;
   const end = spotify.timestamps?.end;
@@ -214,80 +208,73 @@ function updateSpotify(data) {
       const remaining = total - elapsed;
       const pct = Math.min((elapsed / total) * 100, 100);
 
-      els.progressFill.style.width = `${pct}%`;
-      els.timeElapsed.textContent = formatTime(elapsed);
-      els.timeRemaining.textContent = `-${formatTime(Math.max(remaining, 0))}`;
+      els.activityProgressFill.style.width = `${pct}%`;
+      els.activityTimeElapsed.textContent = formatTime(elapsed);
+      els.activityTimeRemaining.textContent = `-${formatTime(Math.max(remaining, 0))}`;
 
-      if (elapsed >= total && spotifyInterval) {
-        clearInterval(spotifyInterval);
-        spotifyInterval = null;
+      if (elapsed >= total && activityInterval) {
+        clearInterval(activityInterval);
+        activityInterval = null;
       }
     }
 
     tick();
-    if (spotifyInterval) clearInterval(spotifyInterval);
-    spotifyInterval = setInterval(tick, 1000);
-  }
-}
-
-async function fetchRecentStreams() {
-  els.songsContainer.innerHTML = '<div class="loading-overlay" style="position:static;background:none;padding:40px 0;"><span>Loading..</span></div>';
-
-  try {
-    const res = await fetch('https://api.stats.fm/api/v1/users/icegodftbl/recent?limit=10');
-    if (!res.ok) throw new Error('fail');
-    const data = await res.json();
-    renderSongs(data.items || []);
-  } catch {
-    els.songsContainer.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">No recent streams available</div>';
-  }
-}
-
-function renderSongs(items) {
-  if (!items.length) {
-    els.songsContainer.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">No recent streams</div>';
-    return;
+    activityInterval = setInterval(tick, 1000);
   }
 
-  els.songsContainer.innerHTML = items.map(item => {
-    const track = item.track || {};
-    const album = track.albums?.[0];
-    const image = album?.image || 'https://via.placeholder.com/48/1a1a1a/666?text=%E2%99%AA';
-    const playedAt = item.playedAt || item.endTime;
-    const timeAgo = playedAt ? timeSince(new Date(playedAt)) : '';
-
-    return `<div class="song-item">
-      <img src="${image}" alt="" loading="lazy">
-      <div class="song-item-info">
-        <div class="song-item-title">${escapeHtml(track.name || 'Unknown')}</div>
-        <div class="song-item-artist">${escapeHtml(track.artists?.map(a => a.name).join(', ') || 'Unknown Artist')}</div>
-      </div>
-      <div class="song-item-time">${timeAgo}</div>
-    </div>`;
-  }).join('');
+  els.activityLoader.classList.add('hidden');
 }
 
-function timeSince(date) {
-  const seconds = Math.floor((new Date() - date) / 1000);
-  const intervals = [
-    { label: 'y', seconds: 31536000 },
-    { label: 'mo', seconds: 2592000 },
-    { label: 'd', seconds: 86400 },
-    { label: 'h', seconds: 3600 },
-    { label: 'm', seconds: 60 }
-  ];
+function renderGame(activity) {
+  els.activityTitle.textContent = 'Playing a game';
+  els.activityName.textContent = activity.name;
+  els.activityDetail.textContent = activity.details || '';
+  els.activityState.textContent = activity.state || '';
 
-  for (const interval of intervals) {
-    const count = Math.floor(seconds / interval.seconds);
-    if (count > 0) return `${count}${interval.label} ago`;
+  if (activity.assets?.large_image) {
+    const imageUrl = activity.assets.large_image.startsWith('mp:')
+      ? `https://media.discordapp.net/${activity.assets.large_image.replace('mp:', '')}`
+      : `https://cdn.discordapp.com/app-assets/${activity.application_id}/${activity.assets.large_image}.png`;
+    els.activityIconWrapper.innerHTML = `<img src="${imageUrl}" alt="">`;
+  } else {
+    els.activityIconWrapper.innerHTML = `<svg class="activity-default-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01"/><path d="M10 10h.01"/><path d="M14 10h.01"/><path d="M18 10h.01"/></svg>`;
   }
-  return 'just now';
+
+  const start = activity.timestamps?.start;
+  const end = activity.timestamps?.end;
+
+  if (start || end) {
+    els.activityProgressContainer.style.display = 'flex';
+
+    function tick() {
+      const now = Date.now();
+      const elapsed = start ? now - start : 0;
+      const remaining = end ? end - now : 0;
+      const total = start && end ? end - start : 0;
+      const pct = total > 0 ? Math.min((elapsed / total) * 100, 100) : 0;
+
+      els.activityProgressFill.style.width = `${pct}%`;
+      els.activityTimeElapsed.textContent = formatTime(elapsed);
+      els.activityTimeRemaining.textContent = end ? `-${formatTime(Math.max(remaining, 0))}` : '';
+    }
+
+    tick();
+    activityInterval = setInterval(tick, 1000);
+  } else {
+    els.activityProgressContainer.style.display = 'none';
+  }
+
+  els.activityLoader.classList.add('hidden');
 }
 
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+function renderNoActivity() {
+  els.activityTitle.textContent = 'No Activity';
+  els.activityName.textContent = 'Not doing anything right now';
+  els.activityDetail.textContent = '';
+  els.activityState.textContent = '';
+  els.activityIconWrapper.innerHTML = `<svg class="activity-default-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-3.5-2S9 16 9 16"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>`;
+  els.activityProgressContainer.style.display = 'none';
+  els.activityLoader.classList.add('hidden');
 }
 
 function updateAge() {
@@ -338,5 +325,3 @@ els.closeAgeBtn.addEventListener('click', closeAgePopup);
 els.ageOverlay.addEventListener('click', closeAgePopup);
 
 connectLanyard();
-fetchRecentStreams();
-els.refreshBtn.addEventListener('click', fetchRecentStreams);
