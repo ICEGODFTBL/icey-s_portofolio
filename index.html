@@ -46,6 +46,17 @@
 <span id="guild-badge-tag"></span>
 </div>
 <div class="devices" id="devices"></div>
+<div class="profile-badges-row" id="profile-badges-row">
+<div class="profile-badge-item" data-tooltip="Collected the Orb Profile Badge">
+<img src="orbs.gif" class="badge-img" width="20" height="20" draggable="false" alt="" onerror="this.style.display='none'">
+</div>
+<div class="profile-badge-item" data-tooltip="HypeSquad Balance">
+<img src="HypeSquad.png" class="badge-img" width="20" height="20" draggable="false" alt="" onerror="this.style.display='none'">
+</div>
+<div class="profile-badge-item" data-tooltip="Completed a quest">
+<img src="quest.png" class="badge-img" width="20" height="20" draggable="false" alt="" onerror="this.style.display='none'">
+</div>
+</div>
 </div>
 </div>
 <div class="custom-status" id="custom-status"></div>
@@ -96,6 +107,35 @@
 </div>
 </div>
 </section>
+<section class="section-block" id="section-skills">
+<div class="section-card">
+<div class="section-title-container">
+<div class="card-title">Skills</div>
+</div>
+<div class="skills-grid">
+<div class="skill-item" data-tooltip="Javascript like 20-30%">
+<img src="js.png" class="skill-icon" width="20" height="20" draggable="false" alt="" onerror="this.style.display='none'">
+<span class="skill-name">Javascript</span>
+</div>
+<div class="skill-item" data-tooltip="Lua like 76-82% got into it 5 month ago">
+<img src="lua.png" class="skill-icon" width="20" height="20" draggable="false" alt="" onerror="this.style.display='none'">
+<span class="skill-name">Lua</span>
+</div>
+<div class="skill-item" data-tooltip="skript minecraft plugin thing 80-90%">
+<img src="sk.png" class="skill-icon" width="20" height="20" draggable="false" alt="" onerror="this.style.display='none'">
+<span class="skill-name">Skript</span>
+</div>
+<div class="skill-item" data-tooltip="Python 24-30%">
+<img src="py.png" class="skill-icon" width="20" height="20" draggable="false" alt="" onerror="this.style.display='none'">
+<span class="skill-name">Python</span>
+</div>
+<div class="skill-item" data-tooltip="Bash">
+<img src="bash.png" class="skill-icon" width="20" height="20" draggable="false" alt="" onerror="this.style.display='none'">
+<span class="skill-name">Bash</span>
+</div>
+</div>
+</div>
+</section>
 <section class="section-block" id="section-badges">
 <div class="section-card" id="badges-card">
 <div class="section-title-container">
@@ -106,28 +146,13 @@
 <img src="minecraft.gif" class="stamps-88x31" width="88" height="31" draggable="false" alt="" onerror="this.style.display='none'">
 </div>
 </div>
-<div class="section-card badge-card" id="discord-badges">
-<div class="section-title-container">
-<div class="card-title">Discord Badges</div>
-</div>
-<div class="badge-grid" id="badge-grid">
-<div class="badge-item" data-tooltip="Collected the Orb Profile Badge">
-<img src="orbs.gif" class="badge-img" width="22" height="22" draggable="false" alt="" onerror="this.style.display='none'">
-</div>
-<div class="badge-item" data-tooltip="HypeSquad Balance">
-<img src="HypeSquad.png" class="badge-img" width="22" height="22" draggable="false" alt="" onerror="this.style.display='none'">
-</div>
-<div class="badge-item" data-tooltip="Completed a quest">
-<img src="quest.png" class="badge-img" width="22" height="22" draggable="false" alt="" onerror="this.style.display='none'">
-</div>
-</div>
-</div>
 </section>
 </main>
 <div class="nav-bar" id="nav-bar">
 <button class="nav-btn active" data-target="section-home" data-sound="click.mp3">Home</button>
 <button class="nav-btn" data-target="section-about" data-sound="click.mp3">About Me</button>
 <button class="nav-btn" data-target="section-activity" data-sound="click.mp3">Activity</button>
+<button class="nav-btn" data-target="section-skills" data-sound="click.mp3">Skills</button>
 <button class="nav-btn" data-target="section-badges" data-sound="click.mp3">88x31</button>
 </div>
 <script src="app.js"></script>
