@@ -32,7 +32,6 @@ const els = {
   activityTimeElapsed: document.getElementById('activity-time-elapsed'),
   activityTimeRemaining: document.getElementById('activity-time-remaining'),
   stampGrid: document.getElementById('stamp-grid'),
-  navBar: document.getElementById('nav-bar'),
   contribGrid: document.getElementById('contrib-grid'),
   contribTotal: document.getElementById('contrib-total'),
   contribLoader: document.getElementById('contrib-loader'),
@@ -42,12 +41,6 @@ let activityInterval = null;
 let ws = null;
 let heartbeatInterval = null;
 let ageLongInterval = null;
-
-function playSound(src) {
-  const audio = new Audio(src);
-  audio.volume = 0.3;
-  audio.play().catch(() => {});
-}
 
 function updateTime() {
   const now = new Date();
@@ -289,6 +282,13 @@ function getLevelColor(level) {
   return colors[level] || colors[0];
 }
 
+function shouldDisableScroll() {
+  const dpr = window.devicePixelRatio || 1;
+  const width = window.innerWidth;
+  const estimatedDPI = dpr * 96;
+  return estimatedDPI < 200 && width < 500;
+}
+
 async function fetchContributions() {
   try {
     const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}?y=last`);
@@ -319,6 +319,13 @@ async function fetchContributions() {
     });
 
     els.contribGrid.innerHTML = html;
+
+    if (shouldDisableScroll()) {
+      els.contribGrid.style.overflowX = 'hidden';
+      els.contribGrid.style.flexWrap = 'wrap';
+      els.contribGrid.style.justifyContent = 'center';
+    }
+
     els.contribLoader.classList.add('hidden');
   } catch (e) {
     els.contribLoader.innerHTML = '<span style="font-size:12px;color:var(--text-muted)">Unavailable</span>';
@@ -361,27 +368,6 @@ function checkBadges() {
     };
   });
 }
-
-const navBtns = document.querySelectorAll('.nav-btn');
-
-function scrollToSection(targetId) {
-  const target = document.getElementById(targetId);
-  if (!target) return;
-  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-navBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const target = btn.dataset.target;
-    const sound = btn.dataset.sound;
-
-    navBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    if (sound) playSound(sound);
-    scrollToSection(target);
-  });
-});
 
 checkBadges();
 connectLanyard();
