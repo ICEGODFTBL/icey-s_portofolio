@@ -29,6 +29,7 @@ const els = {
   activityProgressFill: document.getElementById('activity-progress-fill'),
   activityTimeElapsed: document.getElementById('activity-time-elapsed'),
   activityTimeRemaining: document.getElementById('activity-time-remaining'),
+  stampGrid: document.getElementById('stamp-grid'),
 };
 
 let activityInterval = null;
@@ -293,4 +294,14 @@ nameHover.addEventListener('mouseleave', () => {
   }
 });
 
+function checkBadges() {
+  const stamps = els.stampGrid.querySelectorAll('img');
+  stamps.forEach(img => {
+    img.onerror = () => {
+      img.style.display = 'none';
+    };
+  });
+}
+
+checkBadges();
 connectLanyard();
