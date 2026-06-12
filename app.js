@@ -16,7 +16,8 @@ const els = {
   guildBadgeTag: document.getElementById('guild-badge-tag'),
   profileLoader: document.getElementById('profile-loader'),
   timeText: document.getElementById('time-text'),
-  ageText: document.getElementById('age-text'),
+  ageShort: document.getElementById('age-short'),
+  ageLong: document.getElementById('age-long'),
   ageTooltip: document.getElementById('age-tooltip'),
   activityCard: document.getElementById('spotify-card'),
   activityLoader: document.getElementById('spotify-loader'),
@@ -37,6 +38,7 @@ let activityInterval = null;
 let ws = null;
 let heartbeatInterval = null;
 let ageTooltipInterval = null;
+let ageLongInterval = null;
 
 function playSound(src) {
   const audio = new Audio(src);
@@ -277,9 +279,29 @@ function updateAge() {
   const now = new Date();
   const ageMs = now - BIRTH_DATE;
   const ageYears = ageMs / (365.25 * 24 * 60 * 60 * 1000);
-  els.ageText.textContent = ageYears.toFixed(9);
+  els.ageShort.textContent = Math.floor(ageYears);
 }
 updateAge();
+
+const ageWrapper = document.querySelector('.age-text-wrapper');
+
+ageWrapper.addEventListener('mouseenter', () => {
+  function tick() {
+    const now = new Date();
+    const ageMs = now - BIRTH_DATE;
+    const ageYears = ageMs / (365.25 * 24 * 60 * 60 * 1000);
+    els.ageLong.textContent = ageYears.toFixed(9) + ' years old';
+  }
+  tick();
+  ageLongInterval = setInterval(tick, 50);
+});
+
+ageWrapper.addEventListener('mouseleave', () => {
+  if (ageLongInterval) {
+    clearInterval(ageLongInterval);
+    ageLongInterval = null;
+  }
+});
 
 const nameHover = document.getElementById('name-hover');
 
@@ -311,29 +333,23 @@ function checkBadges() {
 }
 
 const navBtns = document.querySelectorAll('.nav-btn');
-const screens = {
-  home: document.getElementById('screen-home'),
-  about: document.getElementById('screen-about'),
-  activity: document.getElementById('screen-activity'),
-  badges: document.getElementById('screen-badges'),
-};
 
-function switchScreen(screenName) {
-  Object.values(screens).forEach(s => s.classList.remove('active'));
-  const target = screens[screenName];
-  if (target) target.classList.add('active');
+function scrollToSection(targetId) {
+  const target = document.getElementById(targetId);
+  if (!target) return;
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 navBtns.forEach(btn => {
   btn.addEventListener('click', () => {
-    const screen = btn.dataset.screen;
+    const target = btn.dataset.target;
     const sound = btn.dataset.sound;
 
     navBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
     if (sound) playSound(sound);
-    switchScreen(screen);
+    scrollToSection(target);
   });
 });
 
