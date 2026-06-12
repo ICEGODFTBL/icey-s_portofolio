@@ -39,6 +39,135 @@ margin: 0 auto;
 padding: 24px;
 }
 
+.top-row {
+display: flex;
+gap: 20px;
+align-items: flex-start;
+}
+
+.top-row .section-block {
+margin-bottom: 0;
+}
+
+.top-row .profile-card {
+flex: 1;
+max-width: none;
+}
+
+.widget-card {
+width: 260px;
+flex-shrink: 0;
+background: var(--bg-secondary);
+border-radius: var(--card-radius);
+border: 1px solid var(--border);
+overflow: hidden;
+box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.widget-header {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 14px 16px;
+border-bottom: 1px solid var(--border);
+background: rgba(255,255,255,0.02);
+}
+
+.widget-avatar {
+width: 32px;
+height: 32px;
+border-radius: 50%;
+object-fit: cover;
+}
+
+.widget-title-text {
+display: flex;
+flex-direction: column;
+min-width: 0;
+}
+
+.widget-name {
+font-size: 13px;
+font-weight: 600;
+color: var(--text-primary);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.widget-status {
+font-size: 11px;
+font-weight: 500;
+}
+
+.widget-body {
+padding: 14px 16px;
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.widget-user-row {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.widget-body-avatar {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+object-fit: cover;
+}
+
+.widget-body-name {
+font-size: 14px;
+font-weight: 600;
+color: var(--text-primary);
+}
+
+.widget-body-username {
+font-size: 12px;
+color: var(--text-muted);
+}
+
+.widget-activity {
+display: flex;
+align-items: center;
+gap: 10px;
+background: var(--bg-tertiary);
+border-radius: 8px;
+padding: 8px 10px;
+}
+
+.widget-activity-img {
+width: 36px;
+height: 36px;
+border-radius: 6px;
+object-fit: cover;
+}
+
+.widget-activity-info {
+min-width: 0;
+}
+
+.widget-activity-name {
+font-size: 12px;
+font-weight: 600;
+color: var(--text-primary);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.widget-activity-detail {
+font-size: 11px;
+color: var(--text-secondary);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
 .section-block {
 margin-bottom: 20px;
 }
@@ -727,7 +856,17 @@ background: var(--text-muted);
 .container {
 padding: 16px;
 }
-.profile-card,
+.top-row {
+flex-direction: column;
+}
+.top-row .profile-card {
+max-width: 100%;
+}
+.widget-card {
+width: 100%;
+max-width: 600px;
+margin: 0 auto;
+}
 .activity-card,
 .section-card {
 max-width: 100%;
