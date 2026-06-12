@@ -1,4 +1,3 @@
-<!-- hi-->
 <!doctype html>
 <html lang="en" translate="no">
 <head>
@@ -31,7 +30,7 @@
 <img src="" class="status-indicator" id="status-icon" width="22" height="22" draggable="false" alt="Online status">
 </div>
 <div class="username-container">
-<div class="display-name" id="display-name"><span class="display-name-inner" id="display-name-click">icegodftbl</span></div>
+<div class="display-name" id="display-name"><span class="display-name-inner">icegodftbl</span></div>
 </div>
 <div class="username-line">
 <div class="username-flex">
@@ -85,7 +84,7 @@
 <div class="about-me-content">
 <div class="about-section">
 <h4>Who am I?</h4>
-<p>i'm <span style="color:#00A4FC;font-weight:600;">icegodftbl</span>, a <span class="age-text" id="age-text">14</span> year old hobby developer and music enjoyer.</p>
+<p>i'm <span class="name-hover" id="name-hover"><span style="color:#00A4FC;font-weight:600;">icegodftbl</span><span class="hover-tooltip" id="age-tooltip"></span></span>, a <span class="age-text" id="age-text">14</span> year old hobby developer and music enjoyer.</p>
 </div>
 <div class="about-section">
 <h4>My Interests</h4>
@@ -104,18 +103,5 @@
 </div>
 </div>
 </main>
-<div id="age-popup" hidden>
-<div class="age-overlay" id="age-overlay"></div>
-<div class="age-window">
-<button class="close-age" id="close-age-btn" aria-label="Close">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-</button>
-<div class="age-header">Age Counter</div>
-<div class="age-value" id="age-ms">0</div>
-<div class="age-label">milliseconds since birth</div>
-<div class="age-sub" id="age-next"></div>
-</div>
-</div>
 <script type="module" src="app.js"></script>
 </body>
-</html>
