@@ -101,7 +101,7 @@
 <div class="progress-container" id="activity-progress-container" style="display:none;">
 <span class="time-display" id="activity-time-elapsed">0:00</span>
 <div class="progress-bar"><div class="progress-fill" id="activity-progress-fill"></div></div>
-<span class="time-display" id="activity-time-remaining">-0:00</span>
+<span class="time-display" id="activity-time-remaning">-0:00</span>
 </div>
 </div>
 </div>
@@ -126,7 +126,7 @@
 <span class="skill-name">Skript</span>
 </div>
 <div class="skill-item" data-tooltip="Python 24-30%">
-<img src="py.png" class="skill-icon" width="20" height="20" draggable="false" alt="" onerror="this.style.display='none'>
+<img src="py.png" class="skill-icon" width="20" height="20" draggable="false" alt="" onerror="this.style.display='none'">
 <span class="skill-name">Python</span>
 </div>
 <div class="skill-item" data-tooltip="Bash">
@@ -148,15 +148,23 @@
 </div>
 </section>
 <section class="section-block" id="section-widget">
-<div class="widget-card">
-<div class="section-title-container" style="padding:16px 16px 0;">
-<div class="card-title">Widget</div>
+<div class="contrib-card">
+<div class="loading-overlay" id="contrib-loader"><span>Loading..</span></div>
+<div class="contrib-header">
+<div class="card-title">GitHub Contributions</div>
+<div class="contrib-total"><span id="contrib-total">0</span> contributions in the last year</div>
 </div>
-<div class="widget-grid">
-<img src="cat1.jpg" alt="" onerror="this.style.display='none'">
-<img src="cat2.jpg" alt="" onerror="this.style.display='none'">
-<img src="cat3.jpg" alt="" onerror="this.style.display='none'">
-<img src="cat4.jpg" alt="" onerror="this.style.display='none'">
+<div class="contrib-calendar" id="contrib-grid"></div>
+<div class="contrib-legend">
+<span>Less</span>
+<div class="contrib-legend-boxes">
+<div class="contrib-legend-box" style="background:var(--bg-tertiary)"></div>
+<div class="contrib-legend-box" style="background:#0e4429"></div>
+<div class="contrib-legend-box" style="background:#006d32"></div>
+<div class="contrib-legend-box" style="background:#26a641"></div>
+<div class="contrib-legend-box" style="background:#39d353"></div>
+</div>
+<span>More</span>
 </div>
 </div>
 </section>
