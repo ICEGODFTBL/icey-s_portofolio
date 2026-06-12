@@ -1,3 +1,4 @@
+
 :root {
 --bg-primary: #0a0a0a;
 --bg-secondary: #111111;
@@ -30,6 +31,7 @@ color: var(--text-primary);
 line-height: 1.6;
 min-height: 100vh;
 overflow-x: hidden;
+padding-bottom: 80px;
 }
 
 .container {
@@ -450,6 +452,52 @@ height: 31px;
 image-rendering: pixelated;
 }
 
+.nav-bar {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+display: flex;
+justify-content: center;
+gap: 8px;
+padding: 12px 24px;
+background: rgba(10,10,10,0.9);
+backdrop-filter: blur(20px);
+border-top: 1px solid var(--border);
+z-index: 1000;
+}
+
+.nav-btn {
+background: var(--bg-tertiary);
+border: 1px solid var(--border);
+color: var(--text-secondary);
+padding: 10px 24px;
+border-radius: 10px;
+font-size: 14px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s ease;
+font-family: inherit;
+}
+
+.nav-btn:hover {
+background: var(--bg-hover);
+color: var(--text-primary);
+border-color: var(--text-muted);
+transform: translateY(-2px);
+}
+
+.nav-btn.active {
+background: var(--accent);
+color: #fff;
+border-color: var(--accent);
+box-shadow: 0 0 20px rgba(0,164,252,0.3);
+}
+
+.nav-btn.active:hover {
+background: var(--accent-hover);
+}
+
 ::-webkit-scrollbar {
 width: 8px;
 }
@@ -477,6 +525,10 @@ grid-template-columns: 1fr;
 .container {
 padding: 16px;
 }
+.nav-btn {
+padding: 8px 16px;
+font-size: 13px;
+}
 }
 
 @media (max-width: 480px) {
@@ -486,4 +538,12 @@ text-align: center;
 }
 .progress-container {
 justify-content: center;
+}
+.nav-bar {
+padding: 10px 12px;
+gap: 6px;
+}
+.nav-btn {
+padding: 8px 12px;
+font-size: 12px;
 }
