@@ -311,29 +311,82 @@ function checkBadges() {
 }
 
 const navBtns = document.querySelectorAll('.nav-btn');
-const sections = {
-  'about-me-card': document.getElementById('about-me-card'),
-  'spotify-card': document.getElementById('spotify-card'),
-  'badges-card': document.getElementById('badges-card'),
+const screens = {
+  home: document.getElementById('screen-home'),
+  about: document.getElementById('screen-about'),
+  activity: document.getElementById('screen-activity'),
+  badges: document.getElementById('screen-badges'),
 };
 
-function scrollToSection(targetId) {
-  const section = sections[targetId];
-  if (!section) return;
-  section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+function switchScreen(screenName) {
+  Object.values(screens).forEach(s => s.classList.remove('active'));
+  const target = screens[screenName];
+  if (target) target.classList.add('active');
 }
 
 navBtns.forEach(btn => {
   btn.addEventListener('click', () => {
-    const target = btn.dataset.target;
+    const screen = btn.dataset.screen;
     const sound = btn.dataset.sound;
 
     navBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
     if (sound) playSound(sound);
-    scrollToSection(target);
+    switchScreen(screen);
   });
+});
+
+document.addEventListener('click', function(e) {
+  var container = document.createElement('div');
+  container.className = 'click-ripple';
+  container.style.left = e.clientX + 'px';
+  container.style.top = e.clientY + 'px';
+
+  var flash = document.createElement('div');
+  flash.className = 'click-flash';
+  container.appendChild(flash);
+
+  var ring = document.createElement('div');
+  ring.className = 'click-ripple-ring';
+  container.appendChild(ring);
+
+  var count = 8;
+  for (var i = 0; i < count; i++) {
+    var p = document.createElement('div');
+    p.className = 'click-particle';
+    var size = (2 + Math.random() * 3).toFixed(1);
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+
+    var angle = (i / count) * 2 * Math.PI + (Math.random() - 0.5) * 0.5;
+    var dist = 16 + Math.random() * 20;
+    var dx = Math.cos(angle) * dist;
+    var dy = Math.sin(angle) * dist;
+
+    p.animate(
+      [
+        { transform: 'translate(0,0) scale(1)', opacity: 1 },
+        {
+          transform: 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(0)',
+          opacity: 0,
+        },
+      ],
+      {
+        duration: 400 + Math.random() * 300,
+        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        fill: 'forwards',
+      },
+    );
+
+    container.appendChild(p);
+  }
+
+  document.body.appendChild(container);
+
+  setTimeout(function() {
+    if (container.parentNode) container.remove();
+  }, 900);
 });
 
 checkBadges();
