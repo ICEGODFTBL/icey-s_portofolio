@@ -30,12 +30,19 @@ const els = {
   activityTimeElapsed: document.getElementById('activity-time-elapsed'),
   activityTimeRemaining: document.getElementById('activity-time-remaining'),
   stampGrid: document.getElementById('stamp-grid'),
+  navBar: document.getElementById('nav-bar'),
 };
 
 let activityInterval = null;
 let ws = null;
 let heartbeatInterval = null;
 let ageTooltipInterval = null;
+
+function playSound(src) {
+  const audio = new Audio(src);
+  audio.volume = 0.3;
+  audio.play().catch(() => {});
+}
 
 function updateTime() {
   const now = new Date();
@@ -302,6 +309,32 @@ function checkBadges() {
     };
   });
 }
+
+const navBtns = document.querySelectorAll('.nav-btn');
+const sections = {
+  'about-me-card': document.getElementById('about-me-card'),
+  'spotify-card': document.getElementById('spotify-card'),
+  'badges-card': document.getElementById('badges-card'),
+};
+
+function scrollToSection(targetId) {
+  const section = sections[targetId];
+  if (!section) return;
+  section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+navBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.target;
+    const sound = btn.dataset.sound;
+
+    navBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    if (sound) playSound(sound);
+    scrollToSection(target);
+  });
+});
 
 checkBadges();
 connectLanyard();
