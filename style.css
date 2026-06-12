@@ -156,7 +156,7 @@ padding: 0 16px;
 .username-flex {
 display: inline-flex;
 align-items: center;
-gap: 8px;
+gap: 6px;
 flex-wrap: wrap;
 justify-content: center;
 }
@@ -439,8 +439,8 @@ transform: translateX(-50%);
 background: var(--bg-secondary);
 border: 1px solid var(--border);
 border-radius: 8px;
-padding: 6px 12px;
-font-size: 12px;
+padding: 10px 16px;
+font-size: 13px;
 color: var(--text-secondary);
 white-space: nowrap;
 opacity: 0;
@@ -557,16 +557,16 @@ opacity: 1;
 .profile-badges-row {
 display: flex;
 justify-content: center;
-gap: 6px;
-margin-top: 8px;
-padding: 0 16px;
+gap: 2px;
+margin-top: 0;
+padding: 0;
 flex-wrap: wrap;
 }
 
 .profile-badge-item {
 position: relative;
-width: 28px;
-height: 28px;
+width: 24px;
+height: 24px;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -574,8 +574,8 @@ cursor: help;
 }
 
 .profile-badge-item .badge-img {
-width: 20px;
-height: 20px;
+width: 18px;
+height: 18px;
 object-fit: contain;
 }
 
@@ -645,6 +645,14 @@ border-color: #3a3a3a;
 width: 20px;
 height: 20px;
 object-fit: contain;
+flex-shrink: 0;
+display: block;
+}
+
+.skill-icon svg {
+width: 20px;
+height: 20px;
+display: block;
 }
 
 .skill-name {
