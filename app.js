@@ -32,6 +32,9 @@ const els = {
   activityTimeRemaining: document.getElementById('activity-time-remaining'),
   stampGrid: document.getElementById('stamp-grid'),
   navBar: document.getElementById('nav-bar'),
+  widgetTitle: document.getElementById('widget-title'),
+  widgetBody: document.getElementById('widget-body'),
+  widgetLoader: document.getElementById('widget-loader'),
 };
 
 let activityInterval = null;
@@ -79,6 +82,7 @@ function connectLanyard() {
     if (t === 'INIT_STATE' || t === 'PRESENCE_UPDATE') {
       updateProfile(d);
       updateActivity(d);
+      updateWidget(d);
     }
 
     if (d && d.heartbeat_interval) {
@@ -272,6 +276,48 @@ function renderNoActivity() {
   els.activityIconWrapper.innerHTML = `<svg class="activity-default-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-3.5-2S9 16 9 16"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>`;
   els.activityProgressContainer.style.display = 'none';
   els.activityLoader.classList.add('hidden');
+}
+
+function updateWidget(data) {
+  if (!data.discord_user) return;
+  els.widgetLoader.classList.add('hidden');
+
+  const avatarHash = data.discord_user.avatar;
+  const avatarUrl = avatarHash
+    ? `https://cdn.discordapp.com/avatars/${USER_ID}/${avatarHash}?size=128`
+    : `https://cdn.discordapp.com/embed/avatars/${parseInt(data.discord_user.discriminator || '0') % 5}.png`;
+
+  const status = data.discord_status || 'offline';
+  const statusColor = {
+    online: '#3ba55d',
+    idle: '#faa81a',
+    dnd: '#ed4245',
+    offline: '#747f8d',
+    invisible: '#747f8d'
+  }[status] || '#747f8d';
+
+  const globalName = data.discord_user.global_name || data.discord_user.username;
+  const username = data.discord_user.username;
+
+  let statusText = status.charAt(0).toUpperCase() + status.slice(1);
+  const custom = data.activities?.find(a => a.type === 4);
+  if (custom && custom.state) statusText = custom.state;
+
+  let activityHtml = '';
+  const game = data.activities?.find(a => a.type === 0 && a.application_id);
+  if (game) {
+    let imgHtml = '';
+    if (game.assets?.large_image) {
+      const imgUrl = game.assets.large_image.startsWith('mp:')
+        ? `https://media.discordapp.net/${game.assets.large_image.replace('mp:', '')}`
+        : `https://cdn.discordapp.com/app-assets/${game.application_id}/${game.assets.large_image}.png`;
+      imgHtml = `<img src="${imgUrl}" class="widget-activity-img" alt="">`;
+    }
+    activityHtml = `<div class="widget-activity">${imgHtml}<div class="widget-activity-info"><div class="widget-activity-name">${game.name}</div><div class="widget-activity-detail">${game.details || ''}</div></div></div>`;
+  }
+
+  els.widgetTitle.innerHTML = `<img src="${avatarUrl}" class="widget-avatar" alt=""><div class="widget-title-text"><div class="widget-name">${globalName}</div><div class="widget-status" style="color:${statusColor}">${statusText}</div></div>`;
+  els.widgetBody.innerHTML = `<div class="widget-user-row"><img src="${avatarUrl}" class="widget-body-avatar" alt=""><div><div class="widget-body-name">${globalName}</div><div class="widget-body-username">@${username}</div></div></div>${activityHtml}`;
 }
 
 function updateAge() {
