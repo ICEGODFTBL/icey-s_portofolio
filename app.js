@@ -37,7 +37,6 @@ const els = {
 let activityInterval = null;
 let ws = null;
 let heartbeatInterval = null;
-let ageTooltipInterval = null;
 let ageLongInterval = null;
 
 function playSound(src) {
@@ -300,26 +299,6 @@ ageWrapper.addEventListener('mouseleave', () => {
   if (ageLongInterval) {
     clearInterval(ageLongInterval);
     ageLongInterval = null;
-  }
-});
-
-const nameHover = document.getElementById('name-hover');
-
-nameHover.addEventListener('mouseenter', () => {
-  function tick() {
-    const now = new Date();
-    const ageMs = now - BIRTH_DATE;
-    const ageYears = ageMs / (365.25 * 24 * 60 * 60 * 1000);
-    els.ageTooltip.textContent = ageYears.toFixed(9) + ' years old';
-  }
-  tick();
-  ageTooltipInterval = setInterval(tick, 50);
-});
-
-nameHover.addEventListener('mouseleave', () => {
-  if (ageTooltipInterval) {
-    clearInterval(ageTooltipInterval);
-    ageTooltipInterval = null;
   }
 });
 
