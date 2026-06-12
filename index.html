@@ -9,18 +9,18 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="icey's portofolio">
 <meta property="og:description" content="hi hi hi hi">
-<meta property="og:image" content="https://icegodftbl.wtf/embed_thing.png">
+<meta property="og:image" content="https://luajit.vercel.app/embed_thing.jpg">
 <meta property="og:site_name" content="icegodftbl">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="icey's portofolio">
 <meta name="twitter:description" content="hi hi hi hi">
-<meta name="twitter:image" content="https://icegodftbl.wtf/embed_thing.png">
+<meta name="twitter:image" content="https://luajit.vercel.app/embed_thing.jpg">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main class="container" id="main-container">
-<div class="screen active" id="screen-home">
+<section class="section-block" id="section-home">
 <div class="profile-card" id="profile">
 <img src="https://t3.ftcdn.net/jpg/15/48/79/14/360_F_1548791489_kCe15LIvISnToWBexEAa8GhU3XiiFEI9.jpg" id="profile-banner" width="500" height="150" decoding="async" draggable="false" alt="">
 <div class="profile-meta-row">
@@ -50,8 +50,8 @@
 </div>
 <div class="custom-status" id="custom-status"></div>
 </div>
-</div>
-<div class="screen" id="screen-about">
+</section>
+<section class="section-block" id="section-about">
 <div class="section-card">
 <div class="section-title-container">
 <div class="card-title">About Me</div>
@@ -64,7 +64,7 @@
 <div class="about-me-content">
 <div class="about-section">
 <h4>Who am I?</h4>
-<p>i'm <span class="name-hover" id="name-hover"><span style="color:#00A4FC;font-weight:600;">icegodftbl</span><span class="hover-tooltip" id="age-tooltip"></span></span>, a <span class="age-text" id="age-text">14</span> year old hobby developer and music enjoyer.</p>
+<p>i'm <span class="name-hover" id="name-hover"><span style="color:#00A4FC;font-weight:600;">icegodftbl</span><span class="hover-tooltip" id="age-tooltip"></span></span>, a <span class="age-text-wrapper"><span class="age-short" id="age-short">14</span><span class="age-long" id="age-long"></span></span> year old hobby developer and music enjoyer.</p>
 </div>
 <div class="about-section">
 <h4>My Interests</h4>
@@ -72,8 +72,8 @@
 </div>
 </div>
 </div>
-</div>
-<div class="screen" id="screen-activity">
+</section>
+<section class="section-block" id="section-activity">
 <div class="activity-card" id="spotify-card">
 <div class="loading-overlay" id="spotify-loader"><span>Loading..</span></div>
 <div class="section-title-container">
@@ -95,8 +95,8 @@
 </div>
 </div>
 </div>
-</div>
-<div class="screen" id="screen-badges">
+</section>
+<section class="section-block" id="section-badges">
 <div class="section-card" id="badges-card">
 <div class="section-title-container">
 <div class="card-title">My 88x31's</div>
@@ -106,13 +106,29 @@
 <img src="minecraft.gif" class="stamps-88x31" width="88" height="31" draggable="false" alt="" onerror="this.style.display='none'">
 </div>
 </div>
+<div class="section-card badge-card" id="discord-badges">
+<div class="section-title-container">
+<div class="card-title">Discord Badges</div>
 </div>
+<div class="badge-grid" id="badge-grid">
+<div class="badge-item" data-tooltip="Collected the Orb Profile Badge">
+<img src="orbs.gif" class="badge-img" width="22" height="22" draggable="false" alt="" onerror="this.style.display='none'">
+</div>
+<div class="badge-item" data-tooltip="HypeSquad Balance">
+<img src="HypeSquad.png" class="badge-img" width="22" height="22" draggable="false" alt="" onerror="this.style.display='none'">
+</div>
+<div class="badge-item" data-tooltip="Completed a quest">
+<img src="quest.png" class="badge-img" width="22" height="22" draggable="false" alt="" onerror="this.style.display='none'">
+</div>
+</div>
+</div>
+</section>
 </main>
 <div class="nav-bar" id="nav-bar">
-<button class="nav-btn active" data-screen="home" data-sound="click.mp3">Home</button>
-<button class="nav-btn" data-screen="about" data-sound="click.mp3">About Me</button>
-<button class="nav-btn" data-screen="activity" data-sound="click.mp3">Activity</button>
-<button class="nav-btn" data-screen="badges" data-sound="click.mp3">88x31</button>
+<button class="nav-btn active" data-target="section-home" data-sound="click.mp3">Home</button>
+<button class="nav-btn" data-target="section-about" data-sound="click.mp3">About Me</button>
+<button class="nav-btn" data-target="section-activity" data-sound="click.mp3">Activity</button>
+<button class="nav-btn" data-target="section-badges" data-sound="click.mp3">88x31</button>
 </div>
 <script src="app.js"></script>
 </body>
