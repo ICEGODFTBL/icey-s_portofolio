@@ -1,3 +1,4 @@
+
 :root {
 --bg-primary: #0a0a0a;
 --bg-secondary: #111111;
@@ -827,6 +828,7 @@ width: 20px;
 height: 20px;
 object-fit: contain;
 flex-shrink: 0;
+background: transparent;
 }
 
 .link-text {
@@ -851,6 +853,7 @@ min-height: 160px;
 width: 20px;
 height: 20px;
 object-fit: contain;
+background: transparent;
 }
 
 .roblox-content {
@@ -913,18 +916,20 @@ color: var(--text-muted);
 display: inline-flex;
 align-items: center;
 gap: 6px;
-background: var(--accent);
-color: #fff;
+background: var(--bg-tertiary);
+color: var(--text-primary);
+border: 1px solid var(--border);
 padding: 6px 14px;
 border-radius: 8px;
 font-size: 12px;
 font-weight: 600;
 text-decoration: none;
-transition: background 0.15s ease;
+transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .roblox-profile-btn:hover {
-background: var(--accent-hover);
+background: var(--bg-hover);
+border-color: #3a3a3a;
 }
 
 @media (max-width: 480px) {
