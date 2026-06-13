@@ -360,6 +360,56 @@ ageWrapper.addEventListener('mouseleave', () => {
   }
 });
 
+
+const ROBLOX_USER_ID = '4789863617';
+
+const robloxEls = {
+  loader: document.getElementById('roblox-loader'),
+  avatar: document.getElementById('roblox-avatar'),
+  name: document.getElementById('roblox-name'),
+  display: document.getElementById('roblox-display'),
+  friends: document.getElementById('roblox-friends'),
+  followers: document.getElementById('roblox-followers'),
+  following: document.getElementById('roblox-following'),
+};
+
+async function fetchRoblox() {
+  try {
+    const [userRes, friendsRes, followersRes, followingRes, thumbRes] = await Promise.all([
+      fetch(`https://users.roblox.com/v1/users/${ROBLOX_USER_ID}`).catch(() => null),
+      fetch(`https://friends.roblox.com/v1/users/${ROBLOX_USER_ID}/friends/count`).catch(() => null),
+      fetch(`https://friends.roblox.com/v1/users/${ROBLOX_USER_ID}/followers/count`).catch(() => null),
+      fetch(`https://friends.roblox.com/v1/users/${ROBLOX_USER_ID}/followings/count`).catch(() => null),
+      fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${ROBLOX_USER_ID}&size=150x150&format=Png&isCircular=false`).catch(() => null),
+    ]);
+
+    const userData = userRes?.ok ? await userRes.json() : null;
+    const friendsData = friendsRes?.ok ? await friendsRes.json() : null;
+    const followersData = followersRes?.ok ? await followersRes.json() : null;
+    const followingData = followingRes?.ok ? await followingRes.json() : null;
+    const thumbData = thumbRes?.ok ? await thumbRes.json() : null;
+
+    if (userData) {
+      robloxEls.name.textContent = userData.name || '';
+      robloxEls.display.textContent = userData.displayName && userData.displayName !== userData.name ? userData.displayName : '';
+    }
+
+    if (thumbData?.data?.[0]?.imageUrl) {
+      robloxEls.avatar.src = thumbData.data[0].imageUrl;
+    } else {
+      robloxEls.avatar.style.display = 'none';
+    }
+
+    robloxEls.friends.textContent = friendsData?.count?.toLocaleString() || '0';
+    robloxEls.followers.textContent = followersData?.count?.toLocaleString() || '0';
+    robloxEls.following.textContent = followingData?.count?.toLocaleString() || '0';
+
+    robloxEls.loader.classList.add('hidden');
+  } catch (e) {
+    robloxEls.loader.innerHTML = '<span style="font-size:12px;color:var(--text-muted)">Unavailable</span>';
+  }
+}
+
 function checkBadges() {
   const stamps = els.stampGrid.querySelectorAll('img');
   stamps.forEach(img => {
@@ -372,3 +422,5 @@ function checkBadges() {
 checkBadges();
 connectLanyard();
 fetchContributions();
+fetchRoblox();
+
