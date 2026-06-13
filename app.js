@@ -370,8 +370,8 @@ const robloxEls = {
 };
 
 function initRoblox() {
-  robloxEls.name.textContent = 'c67';
-  robloxEls.display.textContent = 'c67';
+  robloxEls.name.textContent = 'icegodftbl';
+  robloxEls.display.textContent = 'icegodftbl';
   robloxEls.friends.textContent = '309';
   robloxEls.followers.textContent = '9';
   robloxEls.following.textContent = '5';
@@ -390,4 +390,3 @@ checkBadges();
 connectLanyard();
 fetchContributions();
 initRoblox();
-
